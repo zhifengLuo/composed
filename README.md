@@ -13,6 +13,7 @@ swoole 4.3.4
 tarsPHP
 
 # 目录结构
+```
 ├── app
 │   ├── db_test.php
 │   ├── index.html
@@ -38,7 +39,7 @@ tarsPHP
 │   ├── Dockerfile-tars
 │   └── php.ini
 └── README.md
-
+```
 
 - 说明
 1. /app 源码文件
@@ -55,3 +56,4 @@ tarsPHP
 ```
 docker-compose up -d
 ```
+访问 demo.local.cn 就可以看到 It‘s ok！
