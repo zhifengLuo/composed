@@ -12,6 +12,7 @@ services:
   nginx:
     image: nginx:1.15-alpine
     container_name: lnginx
+    restart: always
     depends_on:
       - php
     ports:
@@ -24,9 +25,10 @@ services:
       - backend
 
   php:
-    build: ./php
-    # image: registry.cn-shenzhen.aliyuncs.com/luozf/composed_php:73v1
+    # build: ./php
+    image: registry.cn-shenzhen.aliyuncs.com/luozf/composed_php:73v1
     container_name: lphp
+    restart: always
     links:
       - mysql
       - mongo
@@ -42,6 +44,7 @@ services:
   mysql:
     image: mysql:5.7
     container_name: lmysql
+    restart: always
     ports:
       - "3306:3306"
     volumes:
@@ -95,8 +98,7 @@ services:
   tars_center:
     image: tarscloud/tars:php
     container_name: ltars
-    # depends_on:
-    #   - mysql
+    restart: always
     volumes:
       - ${APP_WORKSPACE}tarsData:/data
     environment:
