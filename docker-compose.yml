@@ -18,13 +18,14 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./app:/app
+      - ${APP_WORKSPACE}:/app
       - ./nginx/conf.d:/etc/nginx/conf.d/:ro
     networks:
       - backend
 
   php:
     build: ./php
+    # image: registry.cn-shenzhen.aliyuncs.com/luozf/composed_php:73v1
     container_name: lphp
     links:
       - mysql
@@ -33,7 +34,7 @@ services:
     expose:
       - "9000"
     volumes:
-      - ./app:/app
+      - ${APP_WORKSPACE}:/app
       - ./php/php.ini:/usr/local/etc/php/php.ini:ro
     networks:
       - backend
@@ -81,7 +82,7 @@ services:
   #   container_name: lnode
   #   working_dir: /app
   #   volumes:
-  #     - ./app/node:/app
+  #     - ${APP_WORKSPACE}:/app
   #   # expose:
   #   #   - "8081"
   #   ports:
@@ -97,7 +98,7 @@ services:
     # depends_on:
     #   - mysql
     volumes:
-      - ./app/tars:/data
+      - ${APP_WORKSPACE}tarsData:/data
     environment:
       MOUNT_DATA: "true"
       DBIP: mysql
