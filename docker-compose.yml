@@ -1,0 +1,112 @@
+version: '3.1'
+networks:
+  # frontend:
+  #   driver: ${NETWORKS_DRIVER}
+  #   ipam:
+  #     config:
+  #      - subnet: 10.5.0.0/16
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  nginx:
+    image: nginx:1.15-alpine
+    container_name: lnginx
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/app
+      - ./nginx/conf.d:/etc/nginx/conf.d/:ro
+    networks:
+      - backend
+
+  php:
+    build: ./php
+    container_name: lphp
+    links:
+      - mysql
+      - mongo
+      - redis
+    expose:
+      - "9000"
+    volumes:
+      - ./app:/app
+      - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:5.7
+    container_name: lmysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
+      
+  redis:
+    image: redis:5-alpine
+    container_name: lredis
+    restart: always
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - backend
+    ports:
+      - "6379:6379"
+  
+  mongo:
+    image: mongo
+    container_name: lmongo
+    restart: always
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data/mongo:/data/db
+    networks:
+      - backend
+    ports:
+      - "27017:27017"
+
+  # node:
+  #   image: node
+  #   container_name: lnode
+  #   working_dir: /app
+  #   volumes:
+  #     - ./app/node:/app
+  #   # expose:
+  #   #   - "8081"
+  #   ports:
+  #     - "8081:8081"
+  #   networks:
+  #     frontend:
+  #       ipv4_address: 10.5.0.6
+  #   command: "node index.js" # npm start | npm install --registry=https://registry.npm.taobao.org
+
+  tars_center:
+    image: tarscloud/tars:php
+    container_name: ltars
+    # depends_on:
+    #   - mysql
+    volumes:
+      - ./app/tars:/data
+    environment:
+      MOUNT_DATA: "true"
+      DBIP: mysql
+      DBPort: "3306"
+      DBUser: "root"
+      DBPassword: ${MYSQL_DB_PASSWORD}
+    links:
+      - mysql
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
