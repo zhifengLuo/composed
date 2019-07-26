@@ -27,13 +27,8 @@ tarsPHP
 │       └── custom.cnf
 ├── nginx
 │   └── conf.d
-│       ├── cad.conf
 │       ├── default.conf
-│       ├── demo.conf
-│       ├── designer.conf
-│       ├── litku.conf
-│       ├── sp.conf
-│       └── test.conf
+│       └── demo.conf
 ├── php
 │   ├── Dockerfile
 │   ├── Dockerfile-tars
@@ -49,11 +44,25 @@ tarsPHP
 5. /php 自定义配置和 Dockerfile
 
 # 使用
+- 进入 componsed 目录下
 - 复制 env-example 为 .env 并按自己的环境替换里面的配置
-- 在 /nginx/conf.d/ 增加站点配置, 添加测试域名到 hosts 指向到本地。具体可以参考 demo.conf
-- 根据所需编辑 docker-compose.yml 需要用到的容器组。也可以自己写 Dockerfile进行 自定义build
+- 在 /nginx/conf.d/ 增加站点配置, 添加测试域名（如 demo.local.cn）到 hosts 指向到本地。具体可以参考 demo.conf，项目目录结构参考， <font color=red>注：project目录必须与componsed同级</font>：
+```
+├── componsed
+├── tarsData
+├── project-1
+└── project-2
+
+```
+- 或者根据所需编辑 docker-compose.yml 需要用到的容器组。也可以自己写 Dockerfile进行 自定义build
 - 运行命令
-```
-docker-compose up -d
-```
-访问 demo.local.cn 就可以看到 It‘s ok！
+
+    启动
+    ```
+    docker-compose up -d
+    ```
+    终止
+    ```
+    docker-compose down
+    ```
+- 访问 demo.local.cn 应该可以看到 It‘s ok！
