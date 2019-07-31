@@ -47,7 +47,7 @@ tarsPHP
 - 进入 componsed 目录下
 - 复制 env-example 为 .env 并按自己的环境替换里面的配置
 - 运行 docker-compose up 
-- 浏览器访问 demo.local.cn 应该可以看到 It‘s ok！
+- 浏览器访问 demo.local.cn 应该可以看到 Welcome to nginx！
 
 # 添加项目和配置
 - 在 /nginx/conf.d/ 增加站点配置, 添加 project.conf，可参考 demo.conf
@@ -59,7 +59,7 @@ tarsPHP
     └── project
 
     ```
-    
+
 # 自定义修改
 
 - 或者根据所需编辑 docker-compose.yml 需要用到的容器组。也可以自己写 Dockerfile进行 自定义build

@@ -2,11 +2,11 @@ version: '3.1'
 networks:
   # frontend:
   #   driver: ${NETWORKS_DRIVER}
-  #   ipam:
-  #     config:
-  #      - subnet: 10.5.0.0/16
   backend:
     driver: ${NETWORKS_DRIVER}
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
 
 services:
   nginx:
@@ -85,14 +85,13 @@ services:
   #   container_name: lnode
   #   working_dir: /app
   #   volumes:
-  #     - ${APP_WORKSPACE}:/app
-  #   # expose:
-  #   #   - "8081"
+  #     - ./app:/app
+  #   expose:
+  #     - "8081"
   #   ports:
-  #     - "8081:8081"
+  #     - "8081:80"
   #   networks:
-  #     frontend:
-  #       ipv4_address: 10.5.0.6
+  #     - frontend
   #   command: "node index.js" # npm start | npm install --registry=https://registry.npm.taobao.org
 
   tars_center:
@@ -102,14 +101,16 @@ services:
     volumes:
       - ${APP_WORKSPACE}tarsData:/data
     environment:
-      MOUNT_DATA: "true"
+      MOUNT_DATA: "true"  # windows 下要设置为 false
       DBIP: mysql
       DBPort: "3306"
       DBUser: "root"
       DBPassword: ${MYSQL_DB_PASSWORD}
+      DBTarsPass: ${MYSQL_TARS_PASSWORD}
     links:
       - mysql
     ports:
       - "3000:3000"
     networks:
-      - backend
+      backend:
+        ipv4_address: 172.25.0.16
