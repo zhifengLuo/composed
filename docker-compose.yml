@@ -11,27 +11,27 @@ networks:
 ## for windows ##
 volumes:
   mydata:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/luozhifeng/Documents/web/demo/mydata
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /home/luozhifeng/Documents/web/composed/data/mydata
 
 services:
-  nginx:
-    image: nginx:1.15-alpine
-    container_name: lnginx
-    restart: always
-    depends_on:
-      - php
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ${APP_WORKSPACE}:/app
-      - ./nginx/conf.d:/etc/nginx/conf.d/:ro
-    networks:
-      - backend
+  # nginx:
+  #   image: nginx:1.15-alpine
+  #   container_name: lnginx
+  #   restart: always
+  #   depends_on:
+  #     - php
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ${APP_WORKSPACE}:/app
+  #     - ./nginx/conf.d:/etc/nginx/conf.d/:ro
+  #   networks:
+  #     - backend
 
   tengine:
     build: ./tengine
@@ -100,7 +100,7 @@ services:
     #   MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       # - ./data/mongo:/data/db
-      - mydata:/data/db  ## for windowns ##
+      - mydata:/data/db  ## for windows ##
     networks:
       - backend
     ports:

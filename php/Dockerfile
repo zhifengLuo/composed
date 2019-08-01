@@ -71,6 +71,8 @@ RUN set -xe && \
         docker-php-ext-enable phptars && \
         rm -rf master.zip tars-extension-master
 
+RUN ln -s /usr/local/bin/php /usr/bin/php
+
 # clear
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
