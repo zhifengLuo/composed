@@ -47,7 +47,8 @@ services:
       - ${APP_WORKSPACE}:/app
       - ./tengine/conf.d:/etc/nginx/conf.d/:ro
     networks:
-      - backend
+      backend:
+        ipv4_address: 172.25.0.10
 
   php:
     # build: ./php
@@ -64,7 +65,8 @@ services:
       - ${APP_WORKSPACE}:/app
       - ./php/php.ini:/usr/local/etc/php/php.ini:ro
     networks:
-      - backend
+      backend:
+        ipv4_address: 172.25.0.5
 
   mysql:
     image: mysql:5.7
@@ -124,6 +126,8 @@ services:
     image: tarscloud/tars:php
     container_name: ltars
     restart: always
+    depends_on:
+      - mysql
     volumes:
       - ${APP_WORKSPACE}tarsData:/data
     environment:
@@ -135,6 +139,7 @@ services:
       DBTarsPass: ${MYSQL_TARS_PASSWORD}
     links:
       - mysql
+      - php
     ports:
       - "3000:3000"
     networks:

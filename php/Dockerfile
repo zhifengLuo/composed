@@ -22,17 +22,16 @@ RUN apt-get update && apt-get install -y \
         apt-utils \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng-dev && \
+        libpng-dev \
+        libzip-dev \
+        zip \
+        unzip && \
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
         docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-        docker-php-ext-install gd
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-        
-RUN apt-get install -y libzip-dev zip unzip && \
+        docker-php-ext-install gd && \
         docker-php-ext-configure zip --with-libzip && \
-        docker-php-ext-install zip
-
-RUN docker-php-ext-install pdo_mysql && \
+        docker-php-ext-install zip && \
+        docker-php-ext-install pdo_mysql && \
         pecl install redis && \
         docker-php-ext-enable redis && \
         pecl install mongodb && \
@@ -56,11 +55,11 @@ RUN set -xe && \
 
 # install swoole
 ENV SWOOLE_VERSION=4.3.4
-
 RUN set -xe && \
         pecl install swoole-${SWOOLE_VERSION} && \
         docker-php-ext-enable swoole
 
+# tars
 RUN set -xe && \
         curl -LO https://github.com/TarsPHP/tars-extension/archive/master.zip && \
         unzip master.zip && \
@@ -69,15 +68,24 @@ RUN set -xe && \
         ./configure && \
         make install && \
         docker-php-ext-enable phptars && \
+        cd .. && \
         rm -rf master.zip tars-extension-master
 
 RUN ln -s /usr/local/bin/php /usr/bin/php
+COPY --from=tarscloud/tars:dev /usr/local/app /usr/local/app
+COPY --from=tarscloud/tars:dev /usr/local/tars /usr/local/tars
+COPY --from=tarscloud/tars:dev /home/tarsproto /home/tarsproto
 
 # clear
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     rm /var/log/lastlog /var/log/faillog
 
-CMD ["php-fpm"]
+COPY startup.sh /root/startup.sh
+RUN chmod 755 /root/startup.sh
+
+# STOPSIGNAL SIGQUIT
 
 EXPOSE 9000
+# CMD ["php-fpm"]
+CMD [ "/root/startup.sh"]
