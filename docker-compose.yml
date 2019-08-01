@@ -8,6 +8,15 @@ networks:
       config:
         - subnet: 172.25.0.0/16
 
+## for windows ##
+volumes:
+  mydata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/luozhifeng/Documents/web/demo/mydata
+
 services:
   nginx:
     image: nginx:1.15-alpine
@@ -21,6 +30,22 @@ services:
     volumes:
       - ${APP_WORKSPACE}:/app
       - ./nginx/conf.d:/etc/nginx/conf.d/:ro
+    networks:
+      - backend
+
+  tengine:
+    build: ./tengine
+    # image: nginx:1.15-alpine
+    container_name: ltengine
+    restart: always
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${APP_WORKSPACE}:/app
+      - ./tengine/conf.d:/etc/nginx/conf.d/:ro
     networks:
       - backend
 
@@ -74,7 +99,8 @@ services:
     #   MONGO_INITDB_ROOT_USERNAME: root
     #   MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - ./data/mongo:/data/db
+      # - ./data/mongo:/data/db
+      - mydata:/data/db  ## for windowns ##
     networks:
       - backend
     ports:
@@ -101,7 +127,7 @@ services:
     volumes:
       - ${APP_WORKSPACE}tarsData:/data
     environment:
-      MOUNT_DATA: "true"  # windows 下要设置为 false
+      MOUNT_DATA: "true"  ## windows 下要设置为 false ##
       DBIP: mysql
       DBPort: "3306"
       DBUser: "root"
