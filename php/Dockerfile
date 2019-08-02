@@ -15,7 +15,8 @@ RUN echo \
         deb-src http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib \
         deb http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib \
         deb-src http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib \
-        > /etc/apt/sources.list
+        > /etc/apt/sources.list && \
+    echo "" > /etc/apt/sources.list.d/buster.list
 
 # install ext
 RUN apt-get update && apt-get install -y \
@@ -24,6 +25,7 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         libzip-dev \
+        libmemcached-dev \
         zip \
         unzip && \
         curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
@@ -32,8 +34,12 @@ RUN apt-get update && apt-get install -y \
         docker-php-ext-configure zip --with-libzip && \
         docker-php-ext-install zip && \
         docker-php-ext-install pdo_mysql && \
-        pecl install redis memcached mongodb && \
-        docker-php-ext-enable redis memcached mongodb
+        pecl install redis && \
+        docker-php-ext-enable redis && \
+        pecl install mongodb && \
+        docker-php-ext-enable mongodb && \
+        pecl install memcached && \
+        docker-php-ext-enable memcached
 
 # install xdebug
 ARG INSTALL_XDEBUG=false
@@ -91,7 +97,7 @@ RUN apt-get clean && \
 COPY startup.sh /root/startup.sh
 RUN chmod 755 /root/startup.sh
 
-# STOPSIGNAL SIGQUIT
+STOPSIGNAL SIGQUIT
 
 EXPOSE 9000
 # CMD ["php-fpm"]
