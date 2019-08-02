@@ -2,21 +2,24 @@
 
 PHP development environment
 
-used images: nginx, php, mysql, redis, mongo, node, tarsPHP
+used images: tengine, nginx, php, mysql, redis, mongo, node, tarsPHP
 
 PHP extension:
 pdo_mysql
 mongodb
 redis
+memcached
 phalcon 3.4.4
 swoole 4.3.4
 tarsPHP
+xdebug
 
 # 目录结构
 ```
 ├── app
-│   ├── db_test.php
+│   ├── db.php
 │   ├── index.html
+│   ├── index.js
 │   └── phpinfo.php
 ├── data
 ├── docker-compose.yml
@@ -29,10 +32,17 @@ tarsPHP
 │   └── conf.d
 │       ├── default.conf
 │       └── demo.conf
+├── tengine
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── conf.d
+│       ├── default.conf
+│       └── demo.conf
 ├── php
 │   ├── Dockerfile
 │   ├── Dockerfile-tars
 │   └── php.ini
+│   └── xdebug.ini
 └── README.md
 ```
 
@@ -47,7 +57,7 @@ tarsPHP
 - 进入 componsed 目录下
 - 复制 env-example 为 .env 并按自己的环境替换里面的配置
 - 运行 docker-compose up 
-- 浏览器访问 demo.local.cn 应该可以看到 Welcome to nginx！
+- 浏览器访问 demo.local.cn 应该可以看到欢迎页面
 
 # 添加项目和配置
 - 在 /nginx/conf.d/ 增加站点配置, 添加 project.conf，可参考 demo.conf
@@ -56,6 +66,7 @@ tarsPHP
     ```
     ├── componsed
     ├── tarsData
+    ├── framework
     └── project
 
     ```

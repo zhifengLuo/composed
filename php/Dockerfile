@@ -32,10 +32,17 @@ RUN apt-get update && apt-get install -y \
         docker-php-ext-configure zip --with-libzip && \
         docker-php-ext-install zip && \
         docker-php-ext-install pdo_mysql && \
-        pecl install redis && \
-        docker-php-ext-enable redis && \
-        pecl install mongodb && \
-        docker-php-ext-enable mongodb
+        pecl install redis memcached mongodb && \
+        docker-php-ext-enable redis memcached mongodb
+
+# install xdebug
+ARG INSTALL_XDEBUG=false
+
+RUN if [ ${INSTALL_XDEBUG} = true ]; then \
+  pecl install xdebug; \
+  docker-php-ext-enable xdebug \
+;fi
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # install phalcon
 ARG PHALCON_VERSION=3.4.4
@@ -59,7 +66,7 @@ RUN set -xe && \
         pecl install swoole-${SWOOLE_VERSION} && \
         docker-php-ext-enable swoole
 
-# tars
+# install tars
 RUN set -xe && \
         curl -LO https://github.com/TarsPHP/tars-extension/archive/master.zip && \
         unzip master.zip && \
