@@ -2,7 +2,7 @@ FROM php:7.3-fpm
 
 LABEL maintainer="24006765@qq.com"
 
-ENV TZ ${TZ}
+ARG TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 更新apt-get源
@@ -64,10 +64,8 @@ RUN set -xe && \
             ${PWD}/v${PHALCON_VERSION}.tar.gz \
             ${PWD}/cphalcon-${PHALCON_VERSION}
 
-#COPY docker-phalcon-* /usr/local/bin/
-
 # install swoole
-ENV SWOOLE_VERSION=4.3.4
+ARG SWOOLE_VERSION=4.3.4
 RUN set -xe && \
         pecl install swoole-${SWOOLE_VERSION} && \
         docker-php-ext-enable swoole

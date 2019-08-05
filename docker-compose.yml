@@ -34,8 +34,8 @@ services:
   #     - backend
 
   tengine:
-    build: ./tengine
-    # image: nginx:1.15-alpine
+    # build: ./tengine
+    image: elicht/tengine:231v1
     container_name: ltengine
     restart: always
     depends_on:
@@ -51,8 +51,12 @@ services:
         ipv4_address: 172.25.0.10
 
   php:
-    # build: ./php
-    image: registry.cn-shenzhen.aliyuncs.com/luozf/composed_php:73v1
+    build:
+      context: ./php
+      args:
+        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+        - TZ=${TZ}
+    # image: elicht/php:734v2
     container_name: lphp
     restart: always
     links:
