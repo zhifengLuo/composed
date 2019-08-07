@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
         libmemcached-dev \
         zip \
         unzip && \
-        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+        curl -sS https://getcomposer.org/installer | php --install-dir=/usr/local/bin --filename=composer && \
         docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
         docker-php-ext-install gd && \
         docker-php-ext-configure zip --with-libzip && \
@@ -81,11 +81,6 @@ RUN set -xe && \
         docker-php-ext-enable phptars && \
         cd .. && \
         rm -rf master.zip tars-extension-master
-
-RUN ln -s /usr/local/bin/php /usr/bin/php
-COPY --from=tarscloud/tars:dev /usr/local/app /usr/local/app
-COPY --from=tarscloud/tars:dev /usr/local/tars /usr/local/tars
-COPY --from=tarscloud/tars:dev /home/tarsproto /home/tarsproto
 
 # clear
 RUN apt-get clean && \

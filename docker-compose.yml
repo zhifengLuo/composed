@@ -50,13 +50,31 @@ services:
       backend:
         ipv4_address: 172.25.0.10
 
+  # php:
+  #   build:
+  #     context: ./php
+  #     args:
+  #       - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+  #       - TZ=${TZ}
+  #   # image: elicht/php:734v2
+  #   container_name: lphp
+  #   restart: always
+  #   links:
+  #     - mysql
+  #     - mongo
+  #     - redis
+  #   expose:
+  #     - "9000"
+  #   volumes:
+  #     - ${APP_WORKSPACE}:/app
+  #     - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+  #   networks:
+  #     backend:
+  #       ipv4_address: 172.25.0.5
+
   php:
-    build:
-      context: ./php
-      args:
-        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
-        - TZ=${TZ}
-    # image: elicht/php:734v2
+    build: ./tars
+    # image: amazeeio/centos7-php:7.2
     container_name: lphp
     restart: always
     links:
@@ -67,7 +85,14 @@ services:
       - "9000"
     volumes:
       - ${APP_WORKSPACE}:/app
-      - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./tars/php.ini:/etc/php.ini:ro
+    environment:
+      MOUNT_DATA: ${TARS_MOUNT_DATA}
+      DBIP: mysql
+      DBPort: "3306"
+      DBUser: "root"
+      DBPassword: ${MYSQL_DB_PASSWORD}
+      DBTarsPass: ${MYSQL_TARS_PASSWORD}
     networks:
       backend:
         ipv4_address: 172.25.0.5
@@ -135,7 +160,7 @@ services:
     volumes:
       - ${APP_WORKSPACE}tarsData:/data
     environment:
-      MOUNT_DATA: "true"  ## windows 下要设置为 false ##
+      MOUNT_DATA: ${TARS_MOUNT_DATA}
       DBIP: mysql
       DBPort: "3306"
       DBUser: "root"
