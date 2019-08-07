@@ -78,6 +78,7 @@ VOLUME ["/data"]
 ##拷贝资源
 COPY install.sh /root/init/
 COPY entrypoint.sh /sbin/
+COPY xdebug.ini /etc/php.d/50-xdebug.ini
 
 RUN rm /etc/php-fpm.d/www.conf
 ADD www.conf /etc/php-fpm.d/
@@ -88,5 +89,5 @@ EXPOSE 9000
 
 ENTRYPOINT [ "/sbin/entrypoint.sh", "start" ]
 
-CMD ["/usr/sbin/php-fpm", "-F"]
+# CMD ["/usr/sbin/php-fpm", "-F"]
 
