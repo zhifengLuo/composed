@@ -1,1 +1,2 @@
-[mysql]
+[mysqld]
+explicit_defaults_for_timestamp=true
