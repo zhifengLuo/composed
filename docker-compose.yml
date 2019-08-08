@@ -73,8 +73,8 @@ services:
   #       ipv4_address: 172.25.0.5
 
   php:
-    build: ./tars
-    # image: amazeeio/centos7-php:7.2
+    # build: ./tars
+    image: elicht/php:737v1
     container_name: lphp
     restart: always
     links:
