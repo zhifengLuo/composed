@@ -17,8 +17,9 @@ case ${1} in
 	init)
 		;;
 	start)
-		/usr/sbin/php-fpm -F
-		/usr/local/app/tars/tarsnode/util/start.sh
+		source /etc/profile
+		source ~/.bashrc
+		cd /usr/local/app/tars && ./tars_install.sh
 		tail -f /dev/null
 		;;
 	*)

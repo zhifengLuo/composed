@@ -16,15 +16,15 @@ ENV DBTarsPass tars2015
 COPY --from=tarscloud/tars:dev /usr/local/app /usr/local/app
 COPY --from=tarscloud/tars:dev /usr/local/tars /usr/local/tars
 COPY --from=tarscloud/tars:dev /home/tarsproto /home/tarsproto
+COPY --from=tarscloud/tars:dev /root/t*.tgz /root/
 
 RUN yum -y --setopt=tsflags=nodocs update && \
     yum -y --setopt=tsflags=nodocs --nogpgcheck install epel-release deltarpm && \
     yum -y --setopt=tsflags=nodocs --nogpgcheck install https://repo.mysql.com/yum/mysql-8.0-community/el/7/x86_64/mysql80-community-release-el7-1.noarch.rpm && \
-    # rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
-	yum -y --setopt=tsflags=nodocs --nogpgcheck install mysql iproute which flex bison protobuf zlib glibc-common make unzip && \
+	yum -y --setopt=tsflags=nodocs --nogpgcheck install mysql iproute which flex bison protobuf zlib glibc-common make unzip rsync && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
 	localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
-	mkdir -p /usr/local/mysql && ln -s /usr/lib64/mysql /usr/local/mysql/lib && ln -s /usr/include/mysql /usr/local/mysql/include && echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf && ldconfig && \
+	mkdir -p /usr/local/mysql && ln -s /usr/lib64/mysql /usr/local/mysql/lib && echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf && ldconfig \
 	cd /usr/local/mysql/lib/ && ln -s libmysqlclient.so.*.*.* libmysqlclient.a && \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
     yum -y --setopt=tsflags=nodocs --nogpgcheck --enablerepo=remi-php73 install php-cli \ 
@@ -79,7 +79,7 @@ VOLUME ["/data"]
 COPY install.sh /root/init/
 COPY entrypoint.sh /sbin/
 COPY xdebug.ini /etc/php.d/50-xdebug.ini
-
+ADD confs /root/confs
 RUN rm /etc/php-fpm.d/www.conf
 ADD www.conf /etc/php-fpm.d/
 
@@ -88,6 +88,3 @@ RUN chmod 755 /sbin/entrypoint.sh
 EXPOSE 9000
 
 ENTRYPOINT [ "/sbin/entrypoint.sh", "start" ]
-
-# CMD ["/usr/sbin/php-fpm", "-F"]
-

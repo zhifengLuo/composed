@@ -86,6 +86,7 @@ services:
     volumes:
       - ${APP_WORKSPACE}:/app
       - ./tars/php.ini:/etc/php.ini:ro
+      - ${APP_WORKSPACE}tarsData_node:/data
     environment:
       MOUNT_DATA: ${TARS_MOUNT_DATA}
       DBIP: mysql
@@ -168,7 +169,6 @@ services:
       DBTarsPass: ${MYSQL_TARS_PASSWORD}
     links:
       - mysql
-      - php
     ports:
       - "3000:3000"
     networks:
