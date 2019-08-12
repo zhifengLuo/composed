@@ -19,6 +19,7 @@ case ${1} in
 	start)
 		source /etc/profile
 		source ~/.bashrc
+		php-fpm -D
 		cd /usr/local/app/tars && ./tars_install.sh
 		tail -f /dev/null
 		;;

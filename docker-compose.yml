@@ -73,8 +73,8 @@ services:
   #       ipv4_address: 172.25.0.5
 
   php:
-    # build: ./tars
-    image: elicht/php:737v1
+    build: ./tars
+    # image: elicht/php:737v1
     container_name: lphp
     restart: always
     links:
@@ -169,6 +169,7 @@ services:
       DBTarsPass: ${MYSQL_TARS_PASSWORD}
     links:
       - mysql
+      - php
     ports:
       - "3000:3000"
     networks:

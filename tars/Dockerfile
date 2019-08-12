@@ -24,7 +24,7 @@ RUN yum -y --setopt=tsflags=nodocs update && \
 	yum -y --setopt=tsflags=nodocs --nogpgcheck install mysql iproute which flex bison protobuf zlib glibc-common make unzip rsync && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
 	localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
-	mkdir -p /usr/local/mysql && ln -s /usr/lib64/mysql /usr/local/mysql/lib && echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf && ldconfig \
+	mkdir -p /usr/local/mysql && ln -s /usr/lib64/mysql /usr/local/mysql/lib && echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf && ldconfig && \
 	cd /usr/local/mysql/lib/ && ln -s libmysqlclient.so.*.*.* libmysqlclient.a && \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
     yum -y --setopt=tsflags=nodocs --nogpgcheck --enablerepo=remi-php73 install php-cli \ 
