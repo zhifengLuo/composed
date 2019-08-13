@@ -23,7 +23,7 @@ RUN yum -y --setopt=tsflags=nodocs update && \
     yum -y --setopt=tsflags=nodocs --nogpgcheck install https://repo.mysql.com/yum/mysql-8.0-community/el/7/x86_64/mysql80-community-release-el7-1.noarch.rpm && \
 	yum -y --setopt=tsflags=nodocs --nogpgcheck install mysql iproute which flex bison protobuf zlib glibc-common make unzip rsync && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-	localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
+	# localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
 	mkdir -p /usr/local/mysql && ln -s /usr/lib64/mysql /usr/local/mysql/lib && echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf && ldconfig && \
 	cd /usr/local/mysql/lib/ && ln -s libmysqlclient.so.*.*.* libmysqlclient.a && \
     rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
@@ -71,7 +71,7 @@ ENV MOUNT_DATA false
 ENV INET_NAME eth0
 
 # 中文字符集支持
-ENV LC_ALL "zh_CN.UTF-8"
+# ENV LC_ALL "zh_CN.UTF-8"
 
 VOLUME ["/data"]
 	

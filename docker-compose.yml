@@ -34,8 +34,8 @@ services:
   #     - backend
 
   tengine:
-    # build: ./tengine
-    image: elicht/tengine:231v1
+    build: ./tengine
+    # image: elicht/tengine:231v1
     container_name: ltengine
     restart: always
     depends_on:
@@ -73,8 +73,11 @@ services:
   #       ipv4_address: 172.25.0.5
 
   php:
-    # build: ./tars
-    image: elicht/php:737v2
+    build:
+      context: ./tars
+      args:
+        - TZ=${TZ}
+    # image: elicht/php:737v2
     container_name: lphp
     restart: always
     links:
@@ -99,7 +102,8 @@ services:
         ipv4_address: 172.25.0.5
 
   mysql:
-    image: mysql:5.7
+    build: ./mysql
+    # image: elicht/mysql:57v1
     container_name: lmysql
     restart: always
     ports:
@@ -113,7 +117,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
       
   redis:
-    image: redis:5-alpine
+    build: ./redis
+    # image: elicht/redis:50v1
     container_name: lredis
     restart: always
     volumes:
@@ -124,7 +129,8 @@ services:
       - "6379:6379"
   
   mongo:
-    image: mongo
+    build: ./mongo
+    # image: elicht/mongo:40v1
     container_name: lmongo
     restart: always
     # environment:
@@ -169,6 +175,7 @@ services:
       DBTarsPass: ${MYSQL_TARS_PASSWORD}
     links:
       - mysql
+      - php
     ports:
       - "3000:3000"
     networks:
