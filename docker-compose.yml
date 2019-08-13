@@ -43,6 +43,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      TZ: ${TZ}
     volumes:
       - ${APP_WORKSPACE}:/app
       - ./tengine/conf.d:/etc/nginx/conf.d/:ro
@@ -55,7 +57,6 @@ services:
   #     context: ./php
   #     args:
   #       - INSTALL_XDEBUG=${INSTALL_XDEBUG}
-  #       - TZ=${TZ}
   #   # image: elicht/php:734v2
   #   container_name: lphp
   #   restart: always
@@ -65,6 +66,8 @@ services:
   #     - redis
   #   expose:
   #     - "9000"
+  #   environment:
+  #     TZ: ${TZ}
   #   volumes:
   #     - ${APP_WORKSPACE}:/app
   #     - ./php/php.ini:/usr/local/etc/php/php.ini:ro
@@ -73,10 +76,7 @@ services:
   #       ipv4_address: 172.25.0.5
 
   php:
-    build:
-      context: ./tars
-      args:
-        - TZ=${TZ}
+    build: ./tars
     # image: elicht/php:737v2
     container_name: lphp
     restart: always
@@ -91,6 +91,7 @@ services:
       - ./tars/php.ini:/etc/php.ini:ro
       - ${APP_WORKSPACE}tarsData_node:/data
     environment:
+      TZ: ${TZ}
       MOUNT_DATA: ${TARS_MOUNT_DATA}
       DBIP: mysql
       DBPort: "3306"
@@ -108,19 +109,22 @@ services:
     restart: always
     ports:
       - "3306:3306"
+    environment:
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     networks:
       - backend
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
       
   redis:
     build: ./redis
     # image: elicht/redis:50v1
     container_name: lredis
     restart: always
+    environment:
+      TZ: ${TZ}
     volumes:
       - ./data/redis:/data
     networks:
@@ -133,9 +137,10 @@ services:
     # image: elicht/mongo:40v1
     container_name: lmongo
     restart: always
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: root
-    #   MONGO_INITDB_ROOT_PASSWORD: example
+    environment:
+      TZ: ${TZ}
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       # - ./data/mongo:/data/db
       - mydata:/data/db  ## for windows ##
@@ -148,6 +153,8 @@ services:
   #   image: node
   #   container_name: lnode
   #   working_dir: /app
+  #   environment:
+  #     TZ: ${TZ}
   #   volumes:
   #     - ./app:/app
   #   expose:
@@ -167,6 +174,7 @@ services:
     volumes:
       - ${APP_WORKSPACE}tarsData:/data
     environment:
+      TZ: ${TZ}
       MOUNT_DATA: ${TARS_MOUNT_DATA}
       DBIP: mysql
       DBPort: "3306"

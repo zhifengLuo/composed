@@ -3,7 +3,7 @@ FROM alpine:3.10
 LABEL maintainer="24006765@qq.com"
 
 ENV TENGINE_VERSION 2.3.1
-ENV TZ=Asia/Shanghai
+ENV TZ PRC
 
 RUN rm -rf /var/cache/apk/* && \
     rm -rf /tmp/* && \

@@ -2,7 +2,7 @@ FROM php:7.3-fpm
 
 LABEL maintainer="24006765@qq.com"
 
-ARG TZ=Asia/Shanghai
+ENV TZ PRC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 更新apt-get源

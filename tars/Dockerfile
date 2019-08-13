@@ -3,7 +3,7 @@ FROM centos/systemd
 WORKDIR /root/
 
 ##修改镜像时区 
-ENV TZ=Asia/Shanghai
+ENV TZ PRC
 	
 ENV DBIP 127.0.0.1
 ENV DBPort 3306
