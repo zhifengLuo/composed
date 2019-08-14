@@ -64,7 +64,7 @@ xdebug
 
 # 添加项目和配置
 1. 在 /nginx/conf.d/ 下添加 project.conf，具体内容参考 demo.conf
-2. 新建 project 目录，位置参考如下： （<font color=red>注：project目录必须与componsed同级</font>）
+2. 新建 project 目录，位置参考如下 （<font color=red>注：project目录必须与componsed同级</font>）
 
     ```
     ├── componsed
