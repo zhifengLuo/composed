@@ -47,11 +47,13 @@ xdebug
 ```
 
 - 说明
+0. /php , /nginx 已经被替代
 1. /app 源码文件
 2. /data 是存放 mysql， redis， mongo 等数据库文件
 3. /logs 日志存放
 4. /mysql 自定义配置文件
 5. /php_tars 自定义配置和 Dockerfile
+6. /tengine 是淘宝在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性的 web 服务器项目
 
     ...
 
@@ -63,7 +65,7 @@ xdebug
 - 浏览器访问 http://localhost 应该可以看到欢迎页面
 
 # 添加项目和配置
-1. 在 /nginx/conf.d/ 下添加 project.conf，具体内容参考 demo.conf
+1. 在 /tengine/conf.d/ 下添加 project.conf，具体内容参考 demo.conf
 2. 新建 project 目录，位置参考如下 （<font color=red>注：project目录必须与componsed同级</font>）
 
     ```
