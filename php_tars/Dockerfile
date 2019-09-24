@@ -41,7 +41,9 @@ RUN yum -y --setopt=tsflags=nodocs update && \
         php-pdo \
         php-pecl-mongodb \
         php-pecl-swoole4 \
-        php-pecl-xdebug \
+        # php-pecl-xdebug \
+        php-pecl-psr \
+        php-process \
         php-pecl-memcached \
         php-pecl-redis5 \
         php-pecl-zip \
@@ -78,7 +80,7 @@ VOLUME ["/data"]
 ##拷贝资源
 COPY install.sh /root/init/
 COPY entrypoint.sh /sbin/
-COPY xdebug.ini /etc/php.d/50-xdebug.ini
+# COPY xdebug.ini /etc/php.d/50-xdebug.ini
 ADD confs /root/confs
 RUN rm /etc/php-fpm.d/www.conf
 ADD www.conf /etc/php-fpm.d/
