@@ -77,7 +77,7 @@ services:
 
   php:
     # build: ./php_tars
-    image: elicht/php:737v2
+    image: elicht/php:73101
     container_name: lphp
     restart: always
     links:
