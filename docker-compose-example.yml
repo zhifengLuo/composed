@@ -1,7 +1,7 @@
-version: '3.1'
+version: "3.1"
 networks:
-  # frontend:
-  #   driver: ${NETWORKS_DRIVER}
+  frontend:
+    driver: ${NETWORKS_DRIVER}
   backend:
     driver: ${NETWORKS_DRIVER}
     ipam:
@@ -102,6 +102,30 @@ services:
       backend:
         ipv4_address: 172.25.0.5
 
+  # tars_center:
+  #   image: tarscloud/tars:php
+  #   container_name: ltars
+  #   restart: always
+  #   depends_on:
+  #     - mysql
+  #   volumes:
+  #     - ${APP_WORKSPACE}tarsData:/data
+  #   environment:
+  #     TZ: ${TZ}
+  #     MOUNT_DATA: ${TARS_MOUNT_DATA}
+  #     DBIP: mysql
+  #     DBPort: "3306"
+  #     DBUser: "root"
+  #     DBPassword: ${MYSQL_DB_PASSWORD}
+  #     DBTarsPass: ${MYSQL_TARS_PASSWORD}
+  #   links:
+  #     - mysql
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     backend:
+  #       ipv4_address: 172.25.0.16
+
   mysql:
     # build: ./mysql
     image: elicht/mysql:57v1
@@ -117,7 +141,7 @@ services:
       - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     networks:
       - backend
-      
+
   redis:
     # build: ./redis
     image: elicht/redis:50v1
@@ -131,7 +155,7 @@ services:
       - backend
     ports:
       - "6379:6379"
-  
+
   mongo:
     # build: ./mongo
     image: elicht/mongo:40v1
@@ -143,48 +167,41 @@ services:
       # MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       # - ./data/mongo:/data/db
-      - mydata:/data/db  ## for windows ##
+      - mydata:/data/db ## for windows ##
     networks:
       - backend
     ports:
       - "27017:27017"
 
-  # node:
-  #   image: node
-  #   container_name: lnode
-  #   working_dir: /app
-  #   environment:
-  #     TZ: ${TZ}
-  #   volumes:
-  #     - ./app:/app
-  #   expose:
-  #     - "8081"
-  #   ports:
-  #     - "8081:80"
-  #   networks:
-  #     - frontend
-  #   command: "node index.js" # npm start | npm install --registry=https://registry.npm.taobao.org
-
-  tars_center:
-    image: tarscloud/tars:php
-    container_name: ltars
+  node:
+    image: node
+    container_name: lnode
     restart: always
-    depends_on:
-      - mysql
-    volumes:
-      - ${APP_WORKSPACE}tarsData:/data
+    working_dir: /app
     environment:
       TZ: ${TZ}
-      MOUNT_DATA: ${TARS_MOUNT_DATA}
-      DBIP: mysql
-      DBPort: "3306"
-      DBUser: "root"
-      DBPassword: ${MYSQL_DB_PASSWORD}
-      DBTarsPass: ${MYSQL_TARS_PASSWORD}
-    links:
-      - mysql
+    volumes:
+      - ./app:/app
+    expose:
+      - "8000"
     ports:
-      - "3000:3000"
+      - "8000:80"
     networks:
-      backend:
-        ipv4_address: 172.25.0.16
+      - frontend
+    stdin_open: true
+    tty: true
+    # command: "node index.js" # npm start | npm install --registry=https://registry.npm.taobao.org
+
+  beanstalkd:
+    # build: ./beanstalkd
+    image: beanstalkd:1
+    container_name: lbeanstalkd
+    restart: always
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ${APP_WORKSPACE}:/app
+    expose:
+      - "11300"
+    networks:
+      - backend
