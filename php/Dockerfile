@@ -25,21 +25,22 @@ RUN apt-get clean && apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
+        libzip-dev \
         # libmcrypt-dev \
         libmemcached-dev \
-        && docker-php-ext-install -j$(nproc) gd  pdo_mysql \
+        && docker-php-ext-install -j$(nproc) gd zip pdo_mysql \
         && pecl install https://pecl.php.net/get/redis-5.2.0.tgz \
         && pecl install memcached \
         && pecl install https://pecl.php.net/get/mongodb-1.7.3.tgz \
         # && pecl install imagick \
         # && pecl install mcrypt \
         && pecl install psr \
-        && pecl install https://pecl.php.net/get/phalcon-4.0.4.tgz \
+        && pecl install phalcon \
         && pecl install https://pecl.php.net/get/swoole-4.4.16.tgz \
         && docker-php-ext-enable redis memcached mongodb psr phalcon swoole
 
 # install composer
-# RUN curl -sS https://getcomposer.org/installer | php --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php --install-dir=/usr/local/bin --filename=composer
 
 # install xdebug
 # ARG INSTALL_XDEBUG=false
