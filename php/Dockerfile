@@ -26,6 +26,7 @@ RUN apt-get clean && apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         libzip-dev \
+        libpcre3-dev \
         # libmcrypt-dev \
         libmemcached-dev \
         && docker-php-ext-install -j$(nproc) gd zip pdo_mysql \
@@ -40,7 +41,7 @@ RUN apt-get clean && apt-get update && apt-get install -y \
         && docker-php-ext-enable redis memcached mongodb psr phalcon swoole
 
 # install composer
-RUN curl -sS https://getcomposer.org/installer | php --install-dir=/usr/local/bin --filename=composer
+# RUN curl -sS https://getcomposer.org/installer | php --install-dir=/usr/local/bin --filename=composer
 
 # install xdebug
 # ARG INSTALL_XDEBUG=false
